@@ -20,6 +20,7 @@ Function Copy-GPMembership{
 
 This is used when giving one person the equivalent permissions as another
 Only use this if explicitly told by the manager that their permissions should be the same. 
+#>
 
 $SourceUser = Read-Host -Prompt "Who is the Source User for Priveledge comparison?"
 $TargetUser = Read-Host -Prompt "Who is the Target user to receive permissions?"

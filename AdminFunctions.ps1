@@ -8,6 +8,7 @@ echo ' Functions:
      Get-Membership
      Copy-GPMembership
      PSSessDAdmin
+     Disable-User
      '
 
 
@@ -55,3 +56,18 @@ Function Reset-UserPwd {
    $PasswordNew = (Read-Host -Prompt "New Password:" -AsSecureString)
    Set-ADAccountPassword -Identity $user -NewPassword $PasswordNew -Credential $CRED
   }
+Function Disable-User {
+#Disables a determined user modifying their description in AD to the date of termination, as well as stripping their group memberships and 
+# moving them to a terminated user's AD. 
+
+$user = Read-Host -Prompt "User to be disabled"
+$DisabledDate = Get-Date -Format "MM/dd/yyyy"
+$TerminatedOU = 'OU=Terminated Users,OU=CTS,DC=TASI,DC=local'
+$cred = Get-Credential wchaneyadmin
+$UserDN = (Get-ADUser -Identity $user).DistinguishedName
+$Groups = (Get-ADUser -Identity $user -Properties *).MemberOf
+
+Set-ADUser $user -Enabled 0 -Description ("Disabled "+$DisabledDate) -Credential $cred
+Move-ADObject -Identity $UserDN -TargetPath $TerminatedOU -Credential $cred
+$Groups | %{Get-ADGroup $_; Remove-ADGroupMember -Identity $_ -Members $user -Credential $cred -WarningAction SilentlyContinue}
+}

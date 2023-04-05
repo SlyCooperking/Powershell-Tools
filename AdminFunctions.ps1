@@ -62,8 +62,8 @@ Function Disable-User {
 
 $user = Read-Host -Prompt "User to be disabled"
 $DisabledDate = Get-Date -Format "MM/dd/yyyy"
-$TerminatedOU = 'OU=Terminated Users,OU=CTS,DC=TASI,DC=local'
-$cred = Get-Credential wchaneyadmin
+$TerminatedOU = 'OU=Terminated Users,OU=OU,DC=DC,DC=local'
+$cred = Get-Credential 
 $UserDN = (Get-ADUser -Identity $user).DistinguishedName
 $Groups = (Get-ADUser -Identity $user -Properties *).MemberOf
 

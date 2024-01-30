@@ -32,8 +32,9 @@ $groups | % {Add-ADGroupMember -Identity $_ -Members $TargetUser -Credential $CR
 }
 
 Function Get-MemberShip {
+    $DC = Read-Host -Prompt "Which Domain Controller would you like to query?"
     $user= Read-Host -Prompt "Username of user?"
-    $object =  Get-ADPrincipalGroupMembership $user
+    $object =  Get-ADPrincipalGroupMembership -Identity $user -Server $DC
 
     $Table = $object | ForEach-Object {
     [pscustomobject] @{

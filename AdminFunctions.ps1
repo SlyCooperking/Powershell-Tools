@@ -50,6 +50,14 @@ Function Get-MemberShip {
     Import-Csv c:\tmp\test.csv
 }
 
+Function Get-RandomString { 
+#Generates a random String
+Add-Type -AssemblyName System.Web
+$length = Read-Host -Prompt "How many characters?"
+$nonAcount = Read-Host -Prompt "How many special Characters?"
+$rString = [System.Web.Security.Membership]::GeneratePassword($length,$nonACount)
+
+
 Function Reset-UserPwd {
 #Resets User Passwords
     
